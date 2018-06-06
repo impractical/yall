@@ -3,6 +3,7 @@ package colour
 import (
 	"fmt"
 	"io"
+	"sort"
 	"strings"
 	"sync"
 
@@ -72,6 +73,7 @@ func (l Logger) AddEntry(e yall.Entry) {
 		}
 		fields = append(fields, sprinter("%s", k)+fmt.Sprintf("=%v", v))
 	}
+	sort.Strings(fields)
 
 	l.mu.Lock()
 	fmt.Fprintf(l.out, "%s %s%s\n", e.LoggedAt.Local().Format("2006/01/02 15:04:05.0000"), sprinter("[%s]", e.Severity), msg)
