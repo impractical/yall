@@ -1,6 +1,8 @@
 package stackdriver
 
 import (
+	"fmt"
+
 	"cloud.google.com/go/logging"
 	uuid "github.com/hashicorp/go-uuid"
 	yall "yall.in"
@@ -30,7 +32,10 @@ func (l Logger) AddEntry(e yall.Entry) {
 		// going to do, anyways?
 		return
 	}
-	l.log.Log(logging.Entry{
+	if e.Error.Err != nil {
+		e.Payload["message"] = fmt.Sprintf("%v\n\n%s\n\n%s", e.Payload["message"], e.Error.Err.Error(), e.Error.Stacktrace)
+	}
+	entry := logging.Entry{
 		Timestamp:   e.LoggedAt,
 		Severity:    logging.ParseSeverity(string(e.Severity)),
 		Payload:     e.Payload,
@@ -39,7 +44,8 @@ func (l Logger) AddEntry(e yall.Entry) {
 		HTTPRequest: (*logging.HTTPRequest)(e.HTTPRequest),
 		// TODO(paddy): maybe set Operation?
 		//TODO(paddy): may be set Resource?
-	})
+	}
+	l.log.Log(entry)
 }
 
 func (l Logger) Flush() error {
