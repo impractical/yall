@@ -6,6 +6,13 @@ import (
 	yall "yall.in"
 )
 
+func New(log *logging.Logger, name string) Logger {
+	return Logger{
+		log:  log,
+		name: name,
+	}
+}
+
 type Logger struct {
 	log  *logging.Logger
 	name string
@@ -33,7 +40,6 @@ func (l Logger) AddEntry(e yall.Entry) {
 		InsertID:    id,
 		HTTPRequest: (*logging.HTTPRequest)(e.HTTPRequest),
 		// TODO(paddy): maybe set Operation?
-		LogName: l.name,
 		//TODO(paddy): may be set Resource?
 	})
 }
