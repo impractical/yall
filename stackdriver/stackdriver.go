@@ -33,7 +33,11 @@ func (l Logger) AddEntry(e yall.Entry) {
 		return
 	}
 	if e.Error.Err != nil {
-		e.Payload["message"] = fmt.Sprintf("%v\n\n%s\n\n%s", e.Payload["message"], e.Error.Err.Error(), e.Error.Stacktrace)
+		var message string
+		if e.Payload["message"] != nil {
+			message = fmt.Sprintf("%v\n\n", e.Payload["message"])
+		}
+		e.Payload["message"] = fmt.Sprintf("%s%s\n\n%s", message, e.Error.Err.Error(), e.Error.Stacktrace)
 	}
 	entry := logging.Entry{
 		Timestamp:   e.LoggedAt,
