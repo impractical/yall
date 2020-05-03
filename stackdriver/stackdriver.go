@@ -6,16 +6,14 @@ import (
 	yall "yall.in"
 )
 
-func New(log *logging.Logger, name string) Logger {
+func New(log *logging.Logger) Logger {
 	return Logger{
-		log:  log,
-		name: name,
+		log: log,
 	}
 }
 
 type Logger struct {
-	log  *logging.Logger
-	name string
+	log *logging.Logger
 }
 
 func (l Logger) AddEntry(e yall.Entry) {
