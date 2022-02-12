@@ -4,6 +4,8 @@ import (
 	"context"
 	"net/http"
 	"time"
+
+	testing "github.com/mitchellh/go-testing-interface"
 )
 
 const (
@@ -38,6 +40,16 @@ type Severity string
 type Sink interface {
 	AddEntry(Entry)
 	Flush() error
+}
+
+// SinkWithTestHelper is a special kind of Sink that uses the testing.T type.
+// We make it special because any Sink that fills this interface will have the
+// Helper method called on the testing.T that's returned inside yall, marking
+// the logging functions as helpers so the log line numbers are correctly
+// reported in the output.
+type SinkWithTestHelper interface {
+	Sink
+	TestHelper() testing.T
 }
 
 // Entry is a single log event, consisting of structured data and

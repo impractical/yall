@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	testInterface "github.com/mitchellh/go-testing-interface"
 	yall "yall.in"
 )
 
@@ -37,10 +38,10 @@ func New(t *testing.T, sev yall.Severity) Logger {
 type sprintf func(string, ...interface{}) string
 
 func (l Logger) AddEntry(e yall.Entry) {
-	l.t.Helper()
 	if l.t == nil {
 		return
 	}
+	l.t.Helper()
 	if !l.shouldLog(e.Severity) {
 		return
 	}
@@ -72,3 +73,9 @@ func (l Logger) AddEntry(e yall.Entry) {
 func (l Logger) Flush() error {
 	return nil
 }
+
+func (l Logger) TestHelper() testInterface.T {
+	return l.t
+}
+
+var _ yall.SinkWithTestHelper = Logger{}

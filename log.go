@@ -144,12 +144,18 @@ func (l *Logger) Error(msg string) {
 	if l.sink == nil {
 		return
 	}
+	if rh, ok := l.sink.(SinkWithTestHelper); ok {
+		rh.TestHelper().Helper()
+	}
 	l.sink.AddEntry(l.WithField("msg", msg).Entry(Error))
 }
 
 func (l *Logger) Warn(msg string) {
 	if l.sink == nil {
 		return
+	}
+	if rh, ok := l.sink.(SinkWithTestHelper); ok {
+		rh.TestHelper().Helper()
 	}
 	l.sink.AddEntry(l.WithField("msg", msg).Entry(Warning))
 }
@@ -158,12 +164,18 @@ func (l *Logger) Debug(msg string) {
 	if l.sink == nil {
 		return
 	}
+	if rh, ok := l.sink.(SinkWithTestHelper); ok {
+		rh.TestHelper().Helper()
+	}
 	l.sink.AddEntry(l.WithField("msg", msg).Entry(Debug))
 }
 
 func (l *Logger) Info(msg string) {
 	if l.sink == nil {
 		return
+	}
+	if rh, ok := l.sink.(SinkWithTestHelper); ok {
+		rh.TestHelper().Helper()
 	}
 	l.sink.AddEntry(l.WithField("msg", msg).Entry(Info))
 }
