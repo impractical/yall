@@ -3,6 +3,7 @@ package colour
 import (
 	"fmt"
 	"io"
+	"sort"
 	"strings"
 	"sync"
 
@@ -78,6 +79,7 @@ func (l Logger) AddEntry(e yall.Entry) {
 	if e.Error.Err != nil {
 		fmt.Fprintf(l.out, "\t\t"+sprinter("err")+fmt.Sprintf("=%s\n", e.Error.Err.Error()))
 	}
+	sort.Sort(sort.StringSlice(fields))
 	if len(fields) > 0 {
 		fmt.Fprintf(l.out, "\t\t%s\n", strings.Join(fields, "\t"))
 	}
